@@ -1,6 +1,8 @@
 package com.zerobase.store_reservation.type;
 
+import lombok.Getter;
 
+@Getter
 public enum UserRole {
     PARTNER(Authority.PARTNER),  // 사용자 권한
     USER(Authority.USER);  // 관리자 권한

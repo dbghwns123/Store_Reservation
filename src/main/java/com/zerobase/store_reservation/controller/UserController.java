@@ -1,15 +1,22 @@
 package com.zerobase.store_reservation.controller;
 
+import com.zerobase.store_reservation.dto.SignUpRequestDto;
 import com.zerobase.store_reservation.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
-
-
+    @PostMapping("/user/signup")
+    public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
+        userService.signUp(signUpRequestDto);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+    }
 }

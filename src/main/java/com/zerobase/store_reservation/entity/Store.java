@@ -2,10 +2,7 @@ package com.zerobase.store_reservation.entity;
 
 import com.zerobase.store_reservation.dto.CreateStore;
 import com.zerobase.store_reservation.dto.UpdateStore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -18,7 +15,11 @@ public class Store extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long storeId;
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     private String storeName;
     private String location;
