@@ -1,11 +1,8 @@
 package com.zerobase.store_reservation.entity;
 
+import com.zerobase.store_reservation.type.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

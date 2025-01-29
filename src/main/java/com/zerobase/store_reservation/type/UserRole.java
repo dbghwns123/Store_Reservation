@@ -1,6 +1,4 @@
-package com.zerobase.store_reservation.entity;
-
-import lombok.RequiredArgsConstructor;
+package com.zerobase.store_reservation.type;
 
 
 public enum UserRole {
