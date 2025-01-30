@@ -21,6 +21,9 @@ public class User extends TimeStamped {
     @OneToMany(mappedBy = "user")
     private List<Store> stores;
 
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservations;
+
     private String name;
     private String email;
     private String password;

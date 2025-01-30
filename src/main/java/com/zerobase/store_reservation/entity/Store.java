@@ -5,6 +5,8 @@ import com.zerobase.store_reservation.dto.UpdateStore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,6 +22,9 @@ public class Store extends TimeStamped {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "store")
+    private List<Reservation> reservations;
 
     private String storeName;
     private String location;

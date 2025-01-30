@@ -1,6 +1,7 @@
 package com.zerobase.store_reservation.controller;
 
 import com.zerobase.store_reservation.dto.CreateStore;
+import com.zerobase.store_reservation.dto.StoreInfo;
 import com.zerobase.store_reservation.dto.UpdateStore;
 import com.zerobase.store_reservation.entity.Store;
 import com.zerobase.store_reservation.security.UserDetailsImpl;
@@ -25,14 +26,23 @@ public class StoreController {
 
     private final StoreService storeService;
 
+    // 사용자가 매장 정보 조회하는 API (단순 조회 기능이므로 아무나 사용할 수 있음)
+    @GetMapping("/stores")
+    public ResponseEntity<?> getStoreInfo(@RequestParam String storeName) {
+        var result = storeService.getStoreInfo(storeName);
+
+        return ResponseEntity.ok(result);
+    }
+
+
     // 매장 등록 API
     @PostMapping("/stores")
     public ResponseEntity<String> createStore(@RequestBody @Valid CreateStore.Request request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if(!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)){
+        if (!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)) {
             throw new AccessDeniedException("접근 권한이 없습니다");
         }
 
-        storeService.createStore(request,userDetails.getUser());
+        storeService.createStore(request, userDetails.getUser());
         return ResponseEntity.ok("매장 등록을 완료하였습니다");
     }
 

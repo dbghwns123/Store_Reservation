@@ -1,6 +1,7 @@
 package com.zerobase.store_reservation.service;
 
 import com.zerobase.store_reservation.dto.CreateStore;
+import com.zerobase.store_reservation.dto.StoreInfo;
 import com.zerobase.store_reservation.dto.UpdateStore;
 import com.zerobase.store_reservation.entity.Store;
 import com.zerobase.store_reservation.entity.User;
@@ -18,6 +19,13 @@ import java.util.Optional;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+
+    public StoreInfo getStoreInfo(String storeName) {
+        Store existStore = storeRepository.findByStoreName(storeName)
+                .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND));
+        return StoreInfo.fromEntity(existStore);
+
+    }
 
     public void createStore(CreateStore.Request request, User user) {
         Optional<Store> existStore = storeRepository.findByStoreNameAndUser(request.getStoreName(), user);
