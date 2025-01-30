@@ -1,8 +1,8 @@
 package com.zerobase.store_reservation.service;
 
-import com.zerobase.store_reservation.dto.DeleteReservation;
 import com.zerobase.store_reservation.dto.ReservationDto;
 import com.zerobase.store_reservation.dto.ReservationInfo;
+import com.zerobase.store_reservation.dto.UpdateReservation;
 import com.zerobase.store_reservation.entity.Reservation;
 import com.zerobase.store_reservation.entity.Store;
 import com.zerobase.store_reservation.entity.User;
@@ -46,14 +46,24 @@ public class ReservationService {
         reservationRepository.save(new Reservation(user, store, reservationDto.getReservationTime(), ReservationStatus.RESERVATION_SUCCESS));
     }
 
+    // 매장 예약 수정 API (예약 시간만 변경 가능)
+    public void updateReservation(@Valid UpdateReservation updateReservation, User user) {
+        Reservation existReservation = reservationRepository.findByUser_IdAndStore_IdAndReservationTime(
+                        user.getId(), updateReservation.getStoreId(), updateReservation.getReservationTime())
+                .orElseThrow(() -> new StoreException(ErrorCode.RESERVATION_NOT_FOUND));
+        existReservation.setReservationTime(updateReservation.getNewReservationTime());
+        reservationRepository.save(existReservation);
+    }
 
     // 매장 예약 취소 API
-    public void deleteReservation(@Valid DeleteReservation deleteReservation, User user) {
+    public void deleteReservation(@Valid ReservationDto reservationDto, User user) {
         List<Reservation> existReservation = reservationRepository.findAllByUser_IdAndStore_IdAndReservationTime(
-                user.getId(), deleteReservation.getStoreId(), deleteReservation.getReservationTime());
+                user.getId(), reservationDto.getStoreId(), reservationDto.getReservationTime());
         if (existReservation.isEmpty()) {
             throw new StoreException(ErrorCode.RESERVATION_NOT_FOUND);
         }
         reservationRepository.deleteAll(existReservation);
     }
+
+
 }

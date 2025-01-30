@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ReservationStatus {
 
-    RESERVATION_CANCEL,
+//    RESERVATION_CANCEL,
     RESERVATION_SUCCESS,
     VISITED
     ;

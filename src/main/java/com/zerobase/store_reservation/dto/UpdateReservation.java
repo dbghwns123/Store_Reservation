@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DeleteReservation {
+public class UpdateReservation {
 
     @NotNull
     @Min(1)
@@ -20,6 +20,9 @@ public class DeleteReservation {
 
     @NotNull
     private LocalDateTime reservationTime;
+
+    @NotNull
+    private LocalDateTime newReservationTime;
 
 
 }
