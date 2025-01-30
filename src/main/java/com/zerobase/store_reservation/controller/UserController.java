@@ -14,6 +14,7 @@ public class UserController {
 
     private final UserService userService;
 
+    // 회원 가입 API
     @PostMapping("/user/signup")
     public ResponseEntity<String> signUp(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
         userService.signUp(signUpRequestDto);

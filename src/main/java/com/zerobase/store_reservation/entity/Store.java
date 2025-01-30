@@ -25,10 +25,11 @@ public class Store extends TimeStamped {
     private String location;
     private String description;
 
-    public Store(CreateStore.Request request) {
+    public Store(CreateStore.Request request, User user) {
         this.storeName = request.getStoreName();
         this.location = request.getLocation();
         this.description = request.getDescription();
+        this.user = user;
     }
 
     public void update(UpdateStore.Request request) {

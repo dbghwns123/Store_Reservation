@@ -17,7 +17,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // csrf 비활성화
                 .authorizeHttpRequests((requests) -> requests
 //                        .requestMatchers("/", "/home", "/register").permitAll() // 모든 사용자 접근 허용
 //                        .requestMatchers("/partner/**").hasRole("PARTNER") // 파트너만 접근 가능
