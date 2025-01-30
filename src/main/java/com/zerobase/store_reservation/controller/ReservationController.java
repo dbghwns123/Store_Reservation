@@ -1,8 +1,8 @@
 package com.zerobase.store_reservation.controller;
 
+import com.zerobase.store_reservation.dto.DeleteReservation;
 import com.zerobase.store_reservation.dto.ReservationDto;
 import com.zerobase.store_reservation.dto.ReservationInfo;
-import com.zerobase.store_reservation.entity.Reservation;
 import com.zerobase.store_reservation.security.UserDetailsImpl;
 import com.zerobase.store_reservation.service.ReservationService;
 import jakarta.validation.Valid;
@@ -37,10 +37,14 @@ public class ReservationController {
     }
 
     // 매장 예약 수정 API
-    @PutMapping("/reservation")
-    public ResponseEntity<String> updateReservation()
+//    @PutMapping("/reservation")
+
 
     // 매장 예약 취소 API
+    @DeleteMapping("/reservation")
+    public ResponseEntity<String> deleteReservation(@RequestBody @Valid DeleteReservation deleteReservation, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        reservationService.deleteReservation(deleteReservation, userDetails.getUser());
 
-
+        return ResponseEntity.ok("해당 예약이 성공적으로 취소되었습니다.");
+    }
 }
