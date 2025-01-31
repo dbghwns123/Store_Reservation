@@ -24,17 +24,17 @@ public class Review extends TimeStamped {
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
-    @NotBlank
-    @Size(max = 50)
     private String title;
 
-    @NotBlank
-    @Size(max = 300)
     private String detail;
 
-    @NotNull
-    @Min(1)
-    @Max(5)
-    private Long rating;
+    private Integer rating;
 
+    public Review(User user, Store store, String title, String detail, Integer rating) {
+        this.user = user;
+        this.store = store;
+        this.title = title;
+        this.detail = detail;
+        this.rating = rating;
+    }
 }

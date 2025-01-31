@@ -13,7 +13,7 @@ public class ReviewInfo {
     private Long id;
     private String title;
     private String detail;
-    private Long rating;
+    private Integer rating;
 
     public static ReviewInfo fromEntity(Review review) {
         return ReviewInfo.builder()
