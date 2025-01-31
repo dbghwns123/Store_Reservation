@@ -26,6 +26,9 @@ public class Store extends TimeStamped {
     @OneToMany(mappedBy = "store")
     private List<Reservation> reservations;
 
+    @OneToMany(mappedBy = "store")
+    private List<Review> reviews;
+
     private String storeName;
     private String location;
     private String description;
