@@ -37,4 +37,10 @@ public class Review extends TimeStamped {
         this.detail = detail;
         this.rating = rating;
     }
+
+    public void updateReview(String newTitle, String newDetail, Integer newRating) {
+        this.title = newTitle;
+        this.detail = newDetail;
+        this.rating = newRating;
+    }
 }

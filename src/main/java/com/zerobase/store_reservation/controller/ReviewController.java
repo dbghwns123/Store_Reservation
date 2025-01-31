@@ -2,6 +2,7 @@ package com.zerobase.store_reservation.controller;
 
 import com.zerobase.store_reservation.dto.CreateReview;
 import com.zerobase.store_reservation.dto.ReviewInfo;
+import com.zerobase.store_reservation.dto.UpdateReview;
 import com.zerobase.store_reservation.security.UserDetailsImpl;
 import com.zerobase.store_reservation.service.ReviewService;
 import jakarta.validation.Valid;
@@ -35,8 +36,11 @@ public class ReviewController {
 
     // 리뷰 수정 API
     @PutMapping("/review")
-    public ResponseEntity<String> updateReview() {
-        return ResponseEntity.ok("");
+    public ResponseEntity<String> updateReview(@RequestBody @Valid UpdateReview updateReview, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        reviewService.updateReview(updateReview, userDetails.getUser());
+
+        return ResponseEntity.ok("리뷰 수정이 성공적으로 완료되었습니다.");
     }
 
     // 리뷰 삭제 API

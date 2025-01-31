@@ -2,6 +2,7 @@ package com.zerobase.store_reservation.service;
 
 import com.zerobase.store_reservation.dto.CreateReview;
 import com.zerobase.store_reservation.dto.ReviewInfo;
+import com.zerobase.store_reservation.dto.UpdateReview;
 import com.zerobase.store_reservation.entity.Reservation;
 import com.zerobase.store_reservation.entity.Review;
 import com.zerobase.store_reservation.entity.Store;
@@ -48,5 +49,13 @@ public class ReviewService {
         Store store = storeRepository.findById(existReservation.getStore().getId()).get();
 
         reviewRepository.save(new Review(user, store, createReview.getTitle(), createReview.getDetail(), createReview.getRating()));
+    }
+
+    public void updateReview(@Valid UpdateReview updateReview, User user) {
+        Review existReview = reviewRepository.findByIdAndUser_Id(updateReview.getReviewId(), user.getId())
+                .orElseThrow(() -> new StoreException(ErrorCode.REVIEW_NOT_FOUND));
+
+        existReview.updateReview(updateReview.getNewTitle(), updateReview.getNewDetail(), updateReview.getNewRating());
+        reviewRepository.save(existReview);
     }
 }
