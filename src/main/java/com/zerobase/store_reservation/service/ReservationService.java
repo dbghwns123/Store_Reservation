@@ -12,10 +12,12 @@ import com.zerobase.store_reservation.repository.StoreRepository;
 import com.zerobase.store_reservation.type.ErrorCode;
 import com.zerobase.store_reservation.type.ReservationStatus;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,5 +67,18 @@ public class ReservationService {
         reservationRepository.deleteAll(existReservation);
     }
 
+    // 방문 예약 확인
+    @Transactional
+    public void visitStore(@Min(1) Long reservationId, User user) {
+        Reservation reservation = reservationRepository.findByIdAndUser_Id(reservationId, user.getId())
+                .orElseThrow(() -> new StoreException(ErrorCode.RESERVATION_NOT_FOUND));
 
+        // 현재 방문한 시간이 예약시간에서 10분을 뺀 것보다 이후라면(10분 전에 도착 X)
+        if (LocalDateTime.now().isAfter(reservation.getReservationTime().minusMinutes(10))) {
+            throw new StoreException(ErrorCode.RESERVATION_LATE);
+        }
+
+        reservation.updateStatus();
+        reservationRepository.save(reservation);
+    }
 }

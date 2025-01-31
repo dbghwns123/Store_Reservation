@@ -9,7 +9,8 @@ public enum ErrorCode {
 
     STORE_ALREADY_REGISTRATION("이미 등록된 상호명입니다."),
     STORE_NOT_FOUND("해당 매장이 등록되어 있지 않습니다."),
-    RESERVATION_NOT_FOUND("해당 예약이 등록되어 있지 않습니다.")
+    RESERVATION_NOT_FOUND("해당 예약이 등록되어 있지 않습니다."),
+    RESERVATION_LATE("예약시간 10분 전까지만 방문 확인이 가능합니다."),
     ;
 
 

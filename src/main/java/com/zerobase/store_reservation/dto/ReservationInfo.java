@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ReservationInfo {
 
+    private Long reservationId;
     private Long storeId;
     private String storeName;
     private LocalDateTime reservationTime;
@@ -21,6 +22,7 @@ public class ReservationInfo {
 
     public static ReservationInfo fromEntity(Reservation reservation) {
         return ReservationInfo.builder()
+                .reservationId(reservation.getId())
                 .storeId(reservation.getStore().getId())
                 .storeName(reservation.getStore().getStoreName()) // Store의 이름만 포함
                 .reservationTime(reservation.getReservationTime())

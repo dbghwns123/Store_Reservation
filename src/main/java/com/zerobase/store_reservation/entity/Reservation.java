@@ -29,6 +29,7 @@ public class Reservation extends TimeStamped {
     private LocalDateTime reservationTime;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 50)
     private ReservationStatus status;
 
     public Reservation(User user, Store store, LocalDateTime reservationTime, ReservationStatus status) {
@@ -36,5 +37,9 @@ public class Reservation extends TimeStamped {
         this.store = store;
         this.reservationTime = reservationTime;
         this.status = status;
+    }
+
+    public void updateStatus() {
+        this.status = ReservationStatus.VISITED;
     }
 }
