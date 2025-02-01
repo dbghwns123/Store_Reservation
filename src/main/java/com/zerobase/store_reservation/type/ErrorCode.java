@@ -14,6 +14,7 @@ public enum ErrorCode {
     REVIEW_NOT_FOUND("해당 정보로 작성하신 리뷰가 없습니다."),
     VISITED_NOT_YET("매장 이용 후에 리뷰를 작성할 수 있습니다."),
     NO_PERMISSION("권한이 없습니다."),
+    NOT_WAITING_STATUS("예약 대기중 상태일때만 변경이 가능합니다."),
     ;
 
 

@@ -39,7 +39,7 @@ public class Reservation extends TimeStamped {
         this.status = status;
     }
 
-    public void updateStatus() {
-        this.status = ReservationStatus.VISITED;
+    public void updateStatus(ReservationStatus reservationStatus) {
+        this.status = reservationStatus;
     }
 }

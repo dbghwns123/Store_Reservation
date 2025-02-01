@@ -3,6 +3,7 @@ package com.zerobase.store_reservation.service;
 import com.zerobase.store_reservation.dto.ReservationDto;
 import com.zerobase.store_reservation.dto.ReservationInfo;
 import com.zerobase.store_reservation.dto.UpdateReservation;
+import com.zerobase.store_reservation.dto.UpdateStatusDto;
 import com.zerobase.store_reservation.entity.Reservation;
 import com.zerobase.store_reservation.entity.Store;
 import com.zerobase.store_reservation.entity.User;
@@ -45,10 +46,7 @@ public class ReservationService {
 
     public List<ReservationInfo> getReservations(Long storeId, User user) {
         // user 가 partner 인지 일반 user 인지 확인 (일반 유저라면 예외 발생)
-        User existUser = userRepository.findById(user.getId()).get();
-        if (existUser.getUserRole().equals(UserRole.USER)) {
-            throw new StoreException(ErrorCode.NO_PERMISSION);
-        }
+        isPartner(user);
         // StoreService -> getPartnerStores 에서 제공되는 가게 id로 예약조회를 하게 될 것이므로 검증없이 바로 사용 가능
         List<Reservation> reservations = reservationRepository.findAllByStore_Id(storeId);
 
@@ -75,6 +73,27 @@ public class ReservationService {
         reservationRepository.save(existReservation);
     }
 
+    public void updateStatus(@Valid UpdateStatusDto updateStatus, User user) {
+
+        // user 가 partner 인지 일반 user 인지 확인 (일반 유저라면 예외 발생)
+        isPartner(user);
+
+        // 바꿀 예약의 상태가 waiting 이 맞는지 검증
+        Reservation reservation = reservationRepository.findById(updateStatus.getReservationId()).get();
+        if (!reservation.getStatus().equals(ReservationStatus.RESERVATION_WAITING)) {
+            throw new StoreException(ErrorCode.NOT_WAITING_STATUS);
+        }
+
+        // 상태 변경을 하려는 partner 가 매장 주인이 맞는지 검증
+        isOwner(user, reservation);
+
+        if (updateStatus.getStatus()) {
+            reservation.updateStatus(ReservationStatus.RESERVATION_SUCCESS);
+        } else {
+            reservation.updateStatus(ReservationStatus.RESERVATION_FAIL);
+        }
+    }
+
     // 매장 예약 취소 API
     public void deleteReservation(@Valid ReservationDto reservationDto, User user) {
         List<Reservation> existReservation = reservationRepository.findAllByUser_IdAndStore_IdAndReservationTime(
@@ -96,8 +115,24 @@ public class ReservationService {
             throw new StoreException(ErrorCode.RESERVATION_LATE);
         }
 
-        reservation.updateStatus();
+        reservation.updateStatus(ReservationStatus.VISITED);
         reservationRepository.save(reservation);
+    }
+
+    // user 가 partner 가 맞는지 확인하는 메서드
+    private void isPartner(User user) {
+        User existUser = userRepository.findById(user.getId()).get();
+        if (existUser.getUserRole().equals(UserRole.USER)) {
+            throw new StoreException(ErrorCode.NO_PERMISSION);
+        }
+    }
+
+    // user 가 매장 주인이 맞는지 검증하는 메서드
+    private void isOwner(User user, Reservation reservation) {
+        Store store = storeRepository.findById(reservation.getStore().getId()).get();
+        if (!Objects.equals(store.getUser().getId(), user.getId())) {
+            throw new StoreException(ErrorCode.NO_PERMISSION);
+        }
     }
 
 

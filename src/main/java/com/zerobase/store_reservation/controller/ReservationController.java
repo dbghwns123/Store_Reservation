@@ -3,6 +3,7 @@ package com.zerobase.store_reservation.controller;
 import com.zerobase.store_reservation.dto.ReservationDto;
 import com.zerobase.store_reservation.dto.ReservationInfo;
 import com.zerobase.store_reservation.dto.UpdateReservation;
+import com.zerobase.store_reservation.dto.UpdateStatusDto;
 import com.zerobase.store_reservation.security.UserDetailsImpl;
 import com.zerobase.store_reservation.service.ReservationService;
 import jakarta.validation.Valid;
@@ -46,12 +47,20 @@ public class ReservationController {
         return ResponseEntity.ok("매장 예약이 완료되었습니다.");
     }
 
-    // 매장 예약 수정 API (예약 시간만 변경 가능)
+    // 매장 예약 수정 API (일반 유저가 예약 시간만 변경 가능)
     @PutMapping("/reservation")
     public ResponseEntity<String> updateReservation(@RequestBody @Valid UpdateReservation updateReservation, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         reservationService.updateReservation(updateReservation, userDetails.getUser());
         return ResponseEntity.ok("예약 수정이 성공적으로 완료되었습니다.");
     }
+
+    // 점주가 매장 예약을 조회하고 그 중 status 가 waiting 상태인 예약 id와 바꿀 상태를 넘겨주면 상태를 업데이트 하는 API
+    @PutMapping("/reservation/partner")
+    public ResponseEntity<String> updateReservationStatus(@RequestBody @Valid UpdateStatusDto updateStatus, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        reservationService.updateStatus(updateStatus, userDetails.getUser());
+        return ResponseEntity.ok("예약 상태 변경이 성공적으로 완료되었습니다.");
+    }
+
 
     // 매장 예약 취소 API
     @DeleteMapping("/reservation")
