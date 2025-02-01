@@ -6,6 +6,8 @@ import com.zerobase.store_reservation.dto.UpdateReview;
 import com.zerobase.store_reservation.security.UserDetailsImpl;
 import com.zerobase.store_reservation.service.ReviewService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,7 +47,10 @@ public class ReviewController {
 
     // 리뷰 삭제 API
     @DeleteMapping("/review")
-    public ResponseEntity<String> deleteReview() {
-        return ResponseEntity.ok("");
+    public ResponseEntity<String> deleteReview(@RequestParam @NotNull @Min(1) Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        reviewService.deleteReview(reviewId, userDetails.getUser());
+        return ResponseEntity.ok("리뷰 삭제가 성공적으로 완료되었습니다.");
     }
+
 }

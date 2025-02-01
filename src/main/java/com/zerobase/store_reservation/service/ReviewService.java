@@ -14,10 +14,13 @@ import com.zerobase.store_reservation.repository.StoreRepository;
 import com.zerobase.store_reservation.type.ErrorCode;
 import com.zerobase.store_reservation.type.ReservationStatus;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,5 +60,23 @@ public class ReviewService {
 
         existReview.updateReview(updateReview.getNewTitle(), updateReview.getNewDetail(), updateReview.getNewRating());
         reviewRepository.save(existReview);
+    }
+
+    public void deleteReview(@NotNull @Min(1) Long reviewId, User user) {
+        // 우선 request 로 들어온 reviewId 로 해당 리뷰가 있는지 확인(없으면 예외)
+        Review existByReviewId = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new StoreException(ErrorCode.REVIEW_NOT_FOUND));
+
+        // review 가 있다면 우선 해당 리뷰의 사용자가 맞는지 검증(사용자가 맞다면 if 문 빠져나가서 바로 삭제 처리, 아니라면 두 번쨰 if 문)
+        if (!Objects.equals(existByReviewId.getUser().getId(), user.getId())) {
+            // 해당 리뷰의 가게의 점주인지 검증
+            Long id = storeRepository.findById(existByReviewId.getStore().getId()).get().getUser().getId();
+            // 로그인을 한 유저가 해당 가게의 점주인지 확인(맞다면 if 문 빠져나감, 아니라면 예외 발생)
+            if (!Objects.equals(user.getId(), id)) {
+                throw new StoreException(ErrorCode.NO_PERMISSION);
+            }
+        }
+        // if 문을 빠져나왔다면 (해당 리뷰를 작성한 유저 또는 해당 리뷰의 가게의 점주이므로 해당 리뷰 삭제 처리)
+        reviewRepository.delete(existByReviewId);
     }
 }
