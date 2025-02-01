@@ -34,10 +34,17 @@ public class StoreController {
         return ResponseEntity.ok(result);
     }
 
+    // 점주가 자신의 가게 목록을 조회하는 API(점주만 사용 가능한 기능)
+    @GetMapping("/stores/partner")
+    public ResponseEntity<?> getPartnerStores(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        var result = storeService.getPartnerStores(userDetails.getUser());
+        return ResponseEntity.ok(result);
+    }
 
     // 매장 등록 API
     @PostMapping("/stores")
     public ResponseEntity<String> createStore(@RequestBody @Valid CreateStore.Request request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         if (!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)) {
             throw new AccessDeniedException("접근 권한이 없습니다");
         }
@@ -70,7 +77,7 @@ public class StoreController {
 //            throw new AccessDeniedException("접근 권한이 없습니다");
 //        }
 
-        if(!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)){
+        if (!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)) {
             throw new AccessDeniedException("접근 권한이 없습니다");
         }
         storeService.updateStore(request, userDetails.getUser());
@@ -89,7 +96,7 @@ public class StoreController {
 //            throw new AccessDeniedException("접근 권한이 없습니다");
 //        }
 
-        if(!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)){
+        if (!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)) {
             throw new AccessDeniedException("접근 권한이 없습니다");
         }
 

@@ -13,7 +13,7 @@ public enum ErrorCode {
     RESERVATION_LATE("예약시간 10분 전까지만 방문 확인이 가능합니다."),
     REVIEW_NOT_FOUND("해당 정보로 작성하신 리뷰가 없습니다."),
     VISITED_NOT_YET("매장 이용 후에 리뷰를 작성할 수 있습니다."),
-    NO_PERMISSION("해당 리뷰를 삭제할 권한이 없습니다."),
+    NO_PERMISSION("권한이 없습니다."),
     ;
 
 
