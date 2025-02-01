@@ -9,8 +9,10 @@ import com.zerobase.store_reservation.entity.User;
 import com.zerobase.store_reservation.exception.StoreException;
 import com.zerobase.store_reservation.repository.ReservationRepository;
 import com.zerobase.store_reservation.repository.StoreRepository;
+import com.zerobase.store_reservation.repository.UserRepository;
 import com.zerobase.store_reservation.type.ErrorCode;
 import com.zerobase.store_reservation.type.ReservationStatus;
+import com.zerobase.store_reservation.type.UserRole;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +30,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
 
     // 매장 예약 조회 API
     public List<ReservationInfo> getReservationInfo(User user) {
@@ -39,13 +43,27 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
+    public List<ReservationInfo> getReservations(Long storeId, User user) {
+        // user 가 partner 인지 일반 user 인지 확인 (일반 유저라면 예외 발생)
+        User existUser = userRepository.findById(user.getId()).get();
+        if (existUser.getUserRole().equals(UserRole.USER)) {
+            throw new StoreException(ErrorCode.NO_PERMISSION);
+        }
+        // StoreService -> getPartnerStores 에서 제공되는 가게 id로 예약조회를 하게 될 것이므로 검증없이 바로 사용 가능
+        List<Reservation> reservations = reservationRepository.findAllByStore_Id(storeId);
+
+        return reservations.stream()
+                .map(ReservationInfo::fromEntity)
+                .collect(Collectors.toList());
+    }
+
     // 매장 예약 API
     @Transactional
     public void createReservation(@Valid ReservationDto reservationDto, User user) {
         Store store = storeRepository.findById(reservationDto.getStoreId())
                 .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND));
 
-        reservationRepository.save(new Reservation(user, store, reservationDto.getReservationTime(), ReservationStatus.RESERVATION_SUCCESS));
+        reservationRepository.save(new Reservation(user, store, reservationDto.getReservationTime(), ReservationStatus.RESERVATION_WAITING));
     }
 
     // 매장 예약 수정 API (예약 시간만 변경 가능)
@@ -81,4 +99,6 @@ public class ReservationService {
         reservation.updateStatus();
         reservationRepository.save(reservation);
     }
+
+
 }

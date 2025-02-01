@@ -22,11 +22,19 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    // 매장 예약 조회 API
+    // 매장 예약 조회 API (일반 유저)
     @GetMapping("/reservation")
     public ResponseEntity<List<ReservationInfo>> getReservationInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<ReservationInfo> reservationInfo = reservationService.getReservationInfo(userDetails.getUser());
         return ResponseEntity.ok(reservationInfo);
+    }
+
+    // 매장 예약 조회 API (점주)
+    @GetMapping("/reservation/partner")
+    public ResponseEntity<List<ReservationInfo>> getReservation_Partner(@RequestParam @NotNull @Min(1) Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        List<ReservationInfo> reservations = reservationService.getReservations(storeId, userDetails.getUser());
+        return ResponseEntity.ok(reservations);
     }
 
     // 매장 예약 API
