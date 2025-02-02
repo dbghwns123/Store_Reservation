@@ -2,16 +2,12 @@ package com.zerobase.store_reservation.controller;
 
 import com.zerobase.store_reservation.dto.CreateStore;
 import com.zerobase.store_reservation.dto.UpdateStore;
-import com.zerobase.store_reservation.exception.StoreException;
 import com.zerobase.store_reservation.security.UserDetailsImpl;
 import com.zerobase.store_reservation.service.StoreService;
-import com.zerobase.store_reservation.type.ErrorCode;
-import com.zerobase.store_reservation.type.UserRole;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

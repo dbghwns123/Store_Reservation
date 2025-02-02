@@ -1,8 +1,6 @@
 package com.zerobase.store_reservation.dto;
 
 import com.zerobase.store_reservation.entity.Store;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter

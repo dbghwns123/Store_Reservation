@@ -1,7 +1,6 @@
 package com.zerobase.store_reservation.exception;
 
 import com.zerobase.store_reservation.dto.ErrorResponse;
-import com.zerobase.store_reservation.type.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -19,11 +19,7 @@ public class WebSecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // csrf 비활성화
                 .authorizeHttpRequests((requests) -> requests
-//                        .requestMatchers("/", "/home", "/register").permitAll() // 모든 사용자 접근 허용
-//                        .requestMatchers("/partner/**").hasRole("PARTNER") // 파트너만 접근 가능
-//                        .requestMatchers("/customer/**").hasRole("CUSTOMER") // 고객만 접근 가능
-//                        .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
-                                .anyRequest().permitAll()
+                        .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
                         .loginProcessingUrl("/login") // 기본 로그인 엔드포인트로 변경
