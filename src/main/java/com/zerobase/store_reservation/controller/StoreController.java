@@ -2,8 +2,10 @@ package com.zerobase.store_reservation.controller;
 
 import com.zerobase.store_reservation.dto.CreateStore;
 import com.zerobase.store_reservation.dto.UpdateStore;
+import com.zerobase.store_reservation.exception.StoreException;
 import com.zerobase.store_reservation.security.UserDetailsImpl;
 import com.zerobase.store_reservation.service.StoreService;
+import com.zerobase.store_reservation.type.ErrorCode;
 import com.zerobase.store_reservation.type.UserRole;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +70,7 @@ public class StoreController {
 
     private static void isPartner(UserDetailsImpl userDetails) {
         if (!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)) {
-            throw new AccessDeniedException("접근 권한이 없습니다");
+            throw new StoreException(ErrorCode.NO_PERMISSION);
         }
     }
 

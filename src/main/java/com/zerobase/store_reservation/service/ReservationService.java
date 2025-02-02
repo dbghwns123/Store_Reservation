@@ -38,7 +38,7 @@ public class ReservationService {
         // 로그인한 user 의 id 로 예약한 내역을 모두 찾아옴 (없을 시 예외)
         List<Reservation> reservations = reservationRepository.findAllByUser_Id(user.getId());
         if (reservations.isEmpty()) {
-            throw new IllegalArgumentException("아직 예약하신 내역이 없습니다.");
+            throw new StoreException(ErrorCode.RESERVATION_NOT_FOUND);
         }
         return reservations.stream()
                 .map(ReservationInfo::fromEntity)

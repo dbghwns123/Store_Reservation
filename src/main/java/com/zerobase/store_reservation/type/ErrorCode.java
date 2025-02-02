@@ -7,6 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    INTERNAL_SERVER_ERROR("내부 서버 오류가 발생했습니다."),
+    INVALID_REQUEST("잘못된 요청입니다"),
     STORE_ALREADY_REGISTRATION("이미 등록된 상호명입니다."),
     STORE_NOT_FOUND("해당 매장이 등록되어 있지 않습니다."),
     RESERVATION_NOT_FOUND("해당 예약이 등록되어 있지 않습니다."),
