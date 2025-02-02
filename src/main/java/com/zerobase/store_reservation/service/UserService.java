@@ -5,7 +5,6 @@ import com.zerobase.store_reservation.entity.User;
 import com.zerobase.store_reservation.repository.UserRepository;
 import com.zerobase.store_reservation.type.UserRole;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

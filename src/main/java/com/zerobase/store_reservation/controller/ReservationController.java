@@ -18,20 +18,20 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/reservation")
 public class ReservationController {
 
     private final ReservationService reservationService;
 
     // 매장 예약 조회 API (일반 유저)
-    @GetMapping("/reservation")
+    @GetMapping
     public ResponseEntity<List<ReservationInfo>> getReservationInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<ReservationInfo> reservationInfo = reservationService.getReservationInfo(userDetails.getUser());
         return ResponseEntity.ok(reservationInfo);
     }
 
     // 매장 예약 조회 API (점주)
-    @GetMapping("/reservation/partner")
+    @GetMapping("/partner")
     public ResponseEntity<List<ReservationInfo>> getReservation_Partner(@RequestParam @NotNull @Min(1) Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         List<ReservationInfo> reservations = reservationService.getReservations(storeId, userDetails.getUser());
@@ -39,7 +39,7 @@ public class ReservationController {
     }
 
     // 매장 예약 API
-    @PostMapping("/reservation")
+    @PostMapping
     public ResponseEntity<String> createReservation(@RequestBody @Valid ReservationDto reservationDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         // 회원가입이 된 사람은 User 든 Partner 든 모두 매장 예약을 진행할 수 있다.
@@ -48,14 +48,14 @@ public class ReservationController {
     }
 
     // 매장 예약 수정 API (일반 유저가 예약 시간만 변경 가능)
-    @PutMapping("/reservation")
+    @PutMapping
     public ResponseEntity<String> updateReservation(@RequestBody @Valid UpdateReservation updateReservation, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         reservationService.updateReservation(updateReservation, userDetails.getUser());
         return ResponseEntity.ok("예약 수정이 성공적으로 완료되었습니다.");
     }
 
     // 점주가 매장 예약을 조회하고 그 중 status 가 waiting 상태인 예약 id와 바꿀 상태를 넘겨주면 상태를 업데이트 하는 API
-    @PutMapping("/reservation/partner")
+    @PutMapping("/partner")
     public ResponseEntity<String> updateReservationStatus(@RequestBody @Valid UpdateStatusDto updateStatus, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         reservationService.updateStatus(updateStatus, userDetails.getUser());
         return ResponseEntity.ok("예약 상태 변경이 성공적으로 완료되었습니다.");
@@ -63,7 +63,7 @@ public class ReservationController {
 
 
     // 매장 예약 취소 API
-    @DeleteMapping("/reservation")
+    @DeleteMapping
     public ResponseEntity<String> deleteReservation(@RequestBody @Valid ReservationDto reservationDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         reservationService.deleteReservation(reservationDto, userDetails.getUser());
 

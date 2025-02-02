@@ -1,9 +1,7 @@
 package com.zerobase.store_reservation.controller;
 
 import com.zerobase.store_reservation.dto.CreateStore;
-import com.zerobase.store_reservation.dto.StoreInfo;
 import com.zerobase.store_reservation.dto.UpdateStore;
-import com.zerobase.store_reservation.entity.Store;
 import com.zerobase.store_reservation.security.UserDetailsImpl;
 import com.zerobase.store_reservation.service.StoreService;
 import com.zerobase.store_reservation.type.UserRole;
@@ -15,19 +13,16 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Objects;
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/stores")
 public class StoreController {
 
     private final StoreService storeService;
 
     // 사용자가 매장 정보 조회하는 API (단순 조회 기능이므로 아무나 사용할 수 있음)
-    @GetMapping("/stores")
+    @GetMapping
     public ResponseEntity<?> getStoreInfo(@RequestParam String storeName) {
         var result = storeService.getStoreInfo(storeName);
 
@@ -35,14 +30,14 @@ public class StoreController {
     }
 
     // 점주가 자신의 가게 목록을 조회하는 API(점주만 사용 가능한 기능)
-    @GetMapping("/stores/partner")
+    @GetMapping("/partner")
     public ResponseEntity<?> getPartnerStores(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         var result = storeService.getPartnerStores(userDetails.getUser());
         return ResponseEntity.ok(result);
     }
 
     // 매장 등록 API
-    @PostMapping("/stores")
+    @PostMapping
     public ResponseEntity<String> createStore(@RequestBody @Valid CreateStore.Request request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         if (!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)) {
@@ -54,7 +49,7 @@ public class StoreController {
     }
 
     // 매장 정보 수정 API
-    @PutMapping("/stores")
+    @PutMapping
     public ResponseEntity<String> updateStore(@RequestBody @Valid UpdateStore.Request request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 //        boolean result = false;
@@ -85,7 +80,7 @@ public class StoreController {
     }
 
     // 매장 등록 삭제 API
-    @DeleteMapping("/stores")
+    @DeleteMapping
     public ResponseEntity<String> deleteStore(@RequestParam Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
 //        boolean hasPermission = userDetails.getUser().getUserRole().equals(UserRole.PARTNER) &&

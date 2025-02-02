@@ -1,7 +1,6 @@
 package com.zerobase.store_reservation.dto;
 
 import com.zerobase.store_reservation.entity.Reservation;
-import com.zerobase.store_reservation.entity.Store;
 import com.zerobase.store_reservation.type.ReservationStatus;
 import lombok.*;
 

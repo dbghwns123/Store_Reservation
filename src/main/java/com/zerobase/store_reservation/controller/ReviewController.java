@@ -17,27 +17,27 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/review")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
     // 리뷰 조회 API
-    @GetMapping("/review")
+    @GetMapping
     public ResponseEntity<List<ReviewInfo>> getReviews(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<ReviewInfo> reviews = reviewService.getReviews(userDetails.getUser());
         return ResponseEntity.ok(reviews);
     }
 
     // 리뷰 생성 API (예약 조회를 할 때 제공해주는 reservationId를 request 로 받아서 확인)
-    @PostMapping("/review")
+    @PostMapping
     public ResponseEntity<String> createReview(@RequestBody @Valid CreateReview createReview, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         reviewService.createReview(createReview, userDetails.getUser());
         return ResponseEntity.ok("리뷰 작성이 성공적으로 완료되었습니다.");
     }
 
     // 리뷰 수정 API
-    @PutMapping("/review")
+    @PutMapping
     public ResponseEntity<String> updateReview(@RequestBody @Valid UpdateReview updateReview, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         reviewService.updateReview(updateReview, userDetails.getUser());
@@ -46,7 +46,7 @@ public class ReviewController {
     }
 
     // 리뷰 삭제 API
-    @DeleteMapping("/review")
+    @DeleteMapping
     public ResponseEntity<String> deleteReview(@RequestParam @NotNull @Min(1) Long reviewId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         reviewService.deleteReview(reviewId, userDetails.getUser());

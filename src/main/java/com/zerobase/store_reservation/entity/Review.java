@@ -1,7 +1,6 @@
 package com.zerobase.store_reservation.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Getter
