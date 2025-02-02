@@ -35,6 +35,9 @@
 - **ORM**: JPA (Hibernate)
 - **Build Tool**: Gradle 
 - **Version Control**: Git, GitHub
+---
+## 🔨 데이터베이스 구조(ERD)
+
 
 ---
 
