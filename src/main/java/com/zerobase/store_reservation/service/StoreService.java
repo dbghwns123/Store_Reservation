@@ -50,6 +50,9 @@ public class StoreService {
 
     // 매장 등록 API
     public void createStore(CreateStore.Request request, User user) {
+        // 먼저 user 의 role 이 Partner가 맞는지 확인 아니라면 예외 발생
+        isPartner(user);
+
         // request로 매장 이름과 user 정보가 넘어오고 그걸로 이미 등록된 가게 정보가 있는지 확인
         Optional<Store> existStore = storeRepository.findByStoreNameAndUser(request.getStoreName(), user);
         if (existStore.isPresent()) {
@@ -63,6 +66,9 @@ public class StoreService {
     // 매장 정보 수정 API
     @Transactional
     public void updateStore(UpdateStore.Request request, User user) {
+        // 먼저 user 의 role 이 Partner가 맞는지 확인 아니라면 예외 발생
+        isPartner(user);
+
         Store store = storeRepository.findByIdAndUser(request.getStoreId(), user)
                 .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND));
 
@@ -72,10 +78,20 @@ public class StoreService {
 
     // 매장 등록 삭제 API
     public void deleteStore(Long storeId, User user) {
+        // 먼저 user 의 role 이 Partner가 맞는지 확인 아니라면 예외 발생
+        isPartner(user);
+
         Store store = storeRepository.findByIdAndUser(storeId, user)
                 .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND));
         storeRepository.deleteById(storeId);
 
+    }
+
+    // Partner 가 맞는지 확인하는 메서드
+    private static void isPartner(User user) {
+        if (!user.getUserRole().equals(UserRole.PARTNER)) {
+            throw new StoreException(ErrorCode.NO_PERMISSION);
+        }
     }
 
 

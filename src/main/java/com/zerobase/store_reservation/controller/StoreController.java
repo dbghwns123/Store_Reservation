@@ -42,8 +42,6 @@ public class StoreController {
     @PostMapping
     public ResponseEntity<String> createStore(@RequestBody @Valid CreateStore.Request request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        isPartner(userDetails);
-
         storeService.createStore(request, userDetails.getUser());
         return ResponseEntity.ok("매장 등록을 완료하였습니다");
     }
@@ -52,7 +50,6 @@ public class StoreController {
     @PutMapping
     public ResponseEntity<String> updateStore(@RequestBody @Valid UpdateStore.Request request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        isPartner(userDetails);
         storeService.updateStore(request, userDetails.getUser());
         return ResponseEntity.ok("매장 정보 수정을 완료하였습니다.");
     }
@@ -61,17 +58,7 @@ public class StoreController {
     @DeleteMapping
     public ResponseEntity<String> deleteStore(@RequestParam Long storeId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        isPartner(userDetails);
-
         storeService.deleteStore(storeId, userDetails.getUser());
         return ResponseEntity.ok("매장 정보 삭제를 완료하였습니다.");
     }
-
-
-    private static void isPartner(UserDetailsImpl userDetails) {
-        if (!userDetails.getUser().getUserRole().equals(UserRole.PARTNER)) {
-            throw new StoreException(ErrorCode.NO_PERMISSION);
-        }
-    }
-
 }
