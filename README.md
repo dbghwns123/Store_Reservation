@@ -37,7 +37,7 @@
 - **Version Control**: Git, GitHub
 ---
 ## 🔨 데이터베이스 구조(ERD)
-
+![initial](https://github.com/user-attachments/assets/ac6b2664-bcb1-4e32-aad8-0228006cc5d1)
 
 ---
 
