@@ -31,6 +31,7 @@ public class ReviewService {
     private final ReservationRepository reservationRepository;
     private final StoreRepository storeRepository;
 
+    // 리뷰 조회 API
     public List<ReviewInfo> getReviews(User user) {
         List<Review> existReviews = reviewRepository.findAllByUser_id(user.getId());
 
@@ -42,10 +43,12 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+    // 리뷰 생성 API (예약 조회를 할 때 제공해주는 reservationId를 request 로 받아서 확인)
     public void createReview(@Valid CreateReview createReview, User user) {
+        // reservationId와 해당 유저의 id로 예약된 내역이 있는지부터 확인
         Reservation existReservation = reservationRepository.findByIdAndUser_Id(createReview.getReservationId(), user.getId())
                 .orElseThrow(() -> new StoreException(ErrorCode.RESERVATION_NOT_FOUND));
-        // 예약 상태가 방문완료 상태가 아니면 예외 발생
+        // 예약 상태가 방문완료 상태가 아니면 예외 발생(방문 완료 시에만 리뷰 작성 가능)
         if (!existReservation.getStatus().equals(ReservationStatus.VISITED)) {
             throw new StoreException(ErrorCode.VISITED_NOT_YET);
         }
@@ -54,7 +57,9 @@ public class ReviewService {
         reviewRepository.save(new Review(user, store, createReview.getTitle(), createReview.getDetail(), createReview.getRating()));
     }
 
+    // 리뷰 수정 API
     public void updateReview(@Valid UpdateReview updateReview, User user) {
+        // 해당 user가 작성한 review가 있는지부터 확인
         Review existReview = reviewRepository.findByIdAndUser_Id(updateReview.getReviewId(), user.getId())
                 .orElseThrow(() -> new StoreException(ErrorCode.REVIEW_NOT_FOUND));
 
@@ -62,6 +67,7 @@ public class ReviewService {
         reviewRepository.save(existReview);
     }
 
+    // 리뷰 삭제 API
     public void deleteReview(@NotNull @Min(1) Long reviewId, User user) {
         // 우선 request 로 들어온 reviewId 로 해당 리뷰가 있는지 확인(없으면 예외)
         Review existByReviewId = reviewRepository.findById(reviewId)

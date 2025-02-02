@@ -5,6 +5,7 @@ import com.zerobase.store_reservation.entity.User;
 import com.zerobase.store_reservation.repository.UserRepository;
 import com.zerobase.store_reservation.type.UserRole;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final String PARTNER_TOKEN = "ABC123";
+    @Value("${app.partner-token}")
+    private String partnerToken; // application.properties 에서 값을 가져옴
 
 
     public void signUp(SignUpRequestDto signUpRequestDto) {
@@ -30,7 +32,7 @@ public class UserService {
 
         UserRole role = UserRole.USER;
         if (signUpRequestDto.isPartner()) {
-            if (signUpRequestDto.getPartnerToken().equals(PARTNER_TOKEN)) {
+            if (signUpRequestDto.getPartnerToken().equals(partnerToken)) {
                 role = UserRole.PARTNER;
             } else {
                 throw new RuntimeException("토큰 값이 일치하지 않습니다.");
